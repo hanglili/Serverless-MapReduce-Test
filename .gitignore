@@ -15,6 +15,7 @@ downloads/
 eggs/
 .eggs/
 lib/
+!lib/serverless_mr/
 lib64/
 parts/
 sdist/
