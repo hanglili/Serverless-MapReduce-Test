@@ -2,17 +2,17 @@ import boto3
 import json
 
 
-from serverless_mr.static.static_variables import StaticVariables
+# from serverless_mr.static.static_variables import StaticVariables
 from serverless_mr.main import init_job
-# from job.map import map_function
-
+# from user_job.map import map_function
+#
 # s3_client = boto3.client('s3', aws_access_key_id='', aws_secret_access_key='',
 #                          region_name=StaticVariables.DEFAULT_REGION,
 #                          endpoint_url='http://localhost:4572')
 # static_job_info = json.loads(open(StaticVariables.STATIC_JOB_INFO_PATH, 'r').read())
 
 # Execute the job
-init_job(['python3', '0'])
+init_job(['python3', '1'])
 print("The job has finished")
 
 # Output
