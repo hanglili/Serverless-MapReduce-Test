@@ -1,5 +1,20 @@
+# from serverless_mr import *
+from serverless_mr.static.static_variables import StaticVariables
 from serverless_mr.job.map_handler import map_handler
 
+import subprocess
+import os
+
+print(os.getcwd())
+print(subprocess.run('pwd'))
+print("*********serverless_mr*********")
+print(subprocess.run(['ls', 'serverless_mr']))
+print("*********serverless_mr.job*********")
+print(subprocess.run(['ls', 'serverless_mr/job']))
+print("*********serverless_mr.job.map_handler*********")
+print(subprocess.run(['cat', 'serverless_mr/job/map_handler.py']))
+
+print(StaticVariables.SERVERLESS_MR_INIT_PATH)
 
 @map_handler
 def map_function(outputs, input_pair):
