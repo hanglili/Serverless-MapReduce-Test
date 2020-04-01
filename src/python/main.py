@@ -15,6 +15,8 @@ from serverless_mr.main import init_job
 init_job(['python3', '1'])
 print("The job has finished")
 
+# pipeline.map(mapfunction)
+
 # Output
 # output_bin = 3
 # output_prefix = static_job_info['outputPrefix']
