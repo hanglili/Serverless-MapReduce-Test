@@ -1,85 +1,130 @@
 # Serverless-MR-Test
 
-# Serverless-MR
-> Serverless MapReduce
-
-[![Build Status](https://travis-ci.org/hanglili/serverless-mr.svg?branch=master)](https://travis-ci.org/hanglili/serverless-mr)
-
-Serverless-MR is a MapReduce framework that is deployed and run on a serverless platform. Currently it supports AWS 
-serverless services. It can be seen as a light-weight version of Hadoop MapReduce. Hence it can be used for building cost-effective 
-pipeline to run ad hoc MapReduce jobs.
-
-## Features
-- Two modes of running:
-    1. Serverful driver
-    1. Serverless driver: Completely serverless mode where even the driver is being run in AWS Lambda.
-- Allows testing of serverless MapReduce jobs locally where docker containers are used to simulate AWS Lambdas 
-and other AWS services.
-- Enables different input and output data sources of different types provided by the user.
+This project is a data processing example job that uses Serverless-MR library and it aims to show how one could use 
+this library to quickly set up any data processing job.
+[Serverless-MR](https://github.com/hanglili/Serverless-MapReduce) is a MapReduce framework that is deployed 
+and run on a serverless platform. 
 
 
 ## Quickstart::Step by Step
-1. Create a python project and then create the directory ```src/``` at the root-level directory of the project. 
-Inside ```src/```, create a python module with any name. Inside this module, create two modules called 
-```configuration``` and ```user_job```. Remember that module in python is any directory that 
+### Executing a job
+1. Create a python project and then create a directory with the name ```src``` at the root-level directory of the project. 
+Inside ```src```, create a python module with any name. Then inside this module, create two modules called 
+```configuration``` and ```user_job```. Remember that a module in python is a directory that 
 contains ```__init__.py```.
-2. Run the command `pip install -i https://test.pypi.org/simple/ serverless-mr==1.2.0` to install the serverless_mr library.
-2. Inside the module ```configuration```, specify two configuration files: `driver.json` and `static-job-info.json`.
-`driver.json` is more related to the properties of Lambda whereas `static-job-info.json` captures information related 
-to the job. 
-3. Inside the module ```user_job```, you can specify the map, reduce and shuffle partition functions for your job. 
-    - Map function: create a file with the name of `map.py` and inside it, create a function called `map_function` that 
-    is decorated with @map_handler. 
-    - Reduce function: create a file with the name of `reduce.py` and inside it, create a function called `reduce_function` that 
-    is decorated with @reduce_handler. 
-    - Partition function for the shuffling stage: create a file with the name of `partition.py` and inside it, create a function
-    called `partition`.
-4. Create a main function and make it call `init_job` to start executing the job.
-5. (Optional) If you want to test your job locally before deploying and executing it on AWS, you can do so by following
+2. Run the command: ```pip install -i https://test.pypi.org/simple/ serverless-mr``` to install the `serverless_mr` library.
+3. Inside the module ```configuration```, specify two configuration files: `driver.json` and `static-job-info.json`:
+    - `driver.json`: records properties of provisioned AWS Lambda and information on where the provided map and reduce functions 
+    are located. Currently, for any job, use the `driver.json` configuration file of this project. 
+    - `static-job-info.json`: records information of a job. You can tailor the `static-job-info.json` configuration file of
+    this project, to your own job.
+   
+   For more information on the fields of these configuration files, check out: 
+   https://github.com/hanglili/Serverless-MapReduce/blob/master/src/python/notes
+4. Inside the module ```user_job```, you can specify the map function, reduce function and partition function of 
+shuffling for your job:
+    - Map function: create a python script with the name `map.py`. Then inside this script, create a function 
+    called `map_function` that is decorated with `@map_handler`. 
+    - Reduce function: create a python script with the name `reduce.py`. Then inside this script, create a function 
+    called `reduce_function` that is decorated with `@reduce_handler`. 
+    - Partition function for the shuffling stage: create a python script with the name `partition.py`. Then inside 
+    this script, create a function called `partition`.
+5. Set your working directory to be `src/#python/` where `#python` is replaced by the name of the python module you 
+created in step 1. Then, create a main python script under `src/#python/`, that calls `init_job()` to start 
+executing your job.
+6. (Optional) If you want to test your job locally before deploying and executing it on AWS, you can do so by following
 this series of steps:
     1. Setting `true` to the field `localTesting` in `static-job-info.json`.
     2. Install the library `localstack` by running the command `pip install localstack`.
     3. Run docker.
-    4. Download the `Dockerfile` from this project.
-    5. To run localstack (which simulates AWS service behaviours with containers): 
-    run `TMPDIR=/private$TMPDIR SERVICES=serverless LAMBDA_EXECUTOR=docker LAMBDA_REMOVE_CONTAINERS=false DOCKER_HOST=unix:///var/run/docker.sock  DEBUG=1 localstack start --docker`
-    6. Set a value to environmental variable `serverless_mapreduce_role`.
-    7. Run the main function that you have created.
-6. To deploy and run this job on AWS, download the following scripts: `create-biglambda-role.py`, `delete-biglambda-role.py`, 
-`setup.sh`, `policy.json`.
-7. Set your AWS credentials by storing your credentials under the `credentials `file in `~/.aws/`.
-8. Run command `./setup.sh <S3 job bucket> <AWS Account ID>`. Note that the S3 job bucket is used for shuffling.
-It is different to the input and output data sources. 
-9. Run the main function that you have created. 
+    4. To run localstack (which simulates different AWS service behaviours with docker containers), run the command: 
+    ```TMPDIR=/private$TMPDIR SERVICES=serverless LAMBDA_EXECUTOR=docker LAMBDA_REMOVE_CONTAINERS=false DOCKER_HOST=unix:///var/run/docker.sock  DEBUG=1 localstack start --docker```
+    5. Set any value (for example, `123`) to environmental variable `serverless_mapreduce_role`.
+    6. Run the main function that you have created in step 5.
+7. To deploy and run this job on AWS, download the following scripts: `create-biglambda-role.py`, `delete-biglambda-role.py`, 
+`setup.sh`, `policy.json` on the root-level directory of the project.
+8. Set your AWS credentials by storing your credentials under the file `credentials ` in `~/.aws/` directory.
+9. Run the command: ```./setup.sh <S3 shuffling bucket name> <your AWS Account ID>```. 
+10. Run the main function that you have created in step 5.
 
-## Example:
-An example of using `serverless_mr` is illustrated with this project: https://github.com/hanglili/Serverless-MapReduce-Test
+### Writing tests
+Apart from manually testing your code locally using localstack as described in the previous section, you can also write tests.
+These include unit tests and end-to-end tests. Unit tests can be used to test whether your map, reduce and partition 
+functions behave as expected. End-to-end tests automate the manual process of testing your code locally in an end-to-end manner
+using localstack. 
 
-This example can also be served for you to understand the specific formats that map, partition and reduce 
-functions need to follow, apart from the formats of the configuration files.  
+The tests folder which contains all the test files should be inside the module `src/#python` and remember to set your working 
+directory to be `src/#python` when running these test scripts. Also when running end-to-end tests, remember to start 
+docker and localstack.
 
-This example job tries to aggregate the revenue generated by each url (output: [url, revenue]), given a list of input data of
-the following format:
+To understand how these unit tests and end-to-end tests are written, look at this project `src/python/tests`.
+
+## Example job:
+This example job tries to aggregate the revenue generated by each ip address, given the input data. The output format is 
+[ip, revenue] and each input line is of the form:
 ```
-sourceIP VARCHAR(116)
-destURL VARCHAR(100)
-visitDate DATE
-adRevenue FLOAT
-userAgent VARCHAR(256)
-countryCode CHAR(3)
-languageCode CHAR(6)
-searchWord VARCHAR(32)
-duration INT
+sourceIP VARCHAR(116), destURL VARCHAR(100), visitDate DATE, adRevenue FLOAT, userAgent VARCHAR(256), 
+countryCode CHAR(3), languageCode CHAR(6), searchWord VARCHAR(32), duration INT
 ```
-
-## Architecture
-
-To run localstack:
+for example: 
 ```
- TMPDIR=/private$TMPDIR SERVICES=serverless LAMBDA_EXECUTOR=docker LAMBDA_REMOVE_CONTAINERS=false DOCKER_HOST=unix:///var/run/docker.sock  DEBUG=1 localstack start --docker
+0.0.0.0,djecvwmjzejguvrqaryffwwzdasozsslizligyozikvhdeodyvsnotlkldsuvtbcmzajlfdqoopeiqrpfhqhneqrpzdzrgshthe,1974-12-17,10,Xegqzir/8.7,PRT,PRT-PT,Portugalism,7
 ```
 
-Set environment variables to:
+The map function splits an input line by `,`, and then generates the intermediate data from this input line 
+which is a pair of (src_ip, ad_revenue). The code is shown below:
 ```
-serverless_mapreduce_role=arn:aws:iam::123456789:role/serverless_mr_role
+@map_handler
+def map_function(outputs, input_pair):
+    """
+    :param outputs: [(k2, v2)] where k2 and v2 are intermediate data
+    which can be of any types
+    :param input_pair: (k1, v1) where k1 and v1 are assumed to be of type string
+    """
+    try:
+        _, line = input_pair
+        data = line.split(',')
+        src_ip = data[0]
+        ad_revenue = float(data[3])
+        outputs.append(tuple((src_ip, ad_revenue)))
+    except Exception as e:
+        print("type error: " + str(e))
+``` 
+
+The partition function hashes a key using sha256 and then changes this hashed key to the a value between 0 and 
+(num_bins - 1) by performing modulus operation on the hashed key with the number of bins. The code is shown below:
 ```
+def partition(key, num_bins):
+    """
+    :param key: key of intermediate data which can be of any type
+    :param num_bins: number of bins that a key could be partitioned to (this is equal to number of reducers)
+    :returns an integer that denotes the bin assigned to this key
+    """
+    key_hashed = int(hashlib.sha256(key.encode('utf-8')).hexdigest(), 16) % 10**8
+    return key_hashed % num_bins
+
+```
+
+The reduce function receives a intermediate pair of (src_ip, [ad_revenues]) and aggregates the ad_revenues for 
+this source ip by summing them up. The code is shown below:
+```
+@reduce_handler
+def reduce_function(outputs, intermediate_data):
+    """
+    :param outputs: (k2, [v2]) where k2 and v2 are output data
+    which can be of any types
+    :param intermediate_data: (k2, [v2]) where k2 and v2 are of type string.
+    Users need to convert them to their respective types explicitly.
+    NOTE: intermediate data type is the same as the output data type
+    """
+    key, values = intermediate_data
+
+    revenue_sum = 0
+    try:
+        for value in values:
+            revenue_sum += float(value)
+
+        outputs.append((key, [revenue_sum]))
+    except Exception as e:
+        print("type error: " + str(e))
+``` 

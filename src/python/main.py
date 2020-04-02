@@ -12,7 +12,7 @@ from serverless_mr.main import init_job
 # static_job_info = json.loads(open(StaticVariables.STATIC_JOB_INFO_PATH, 'r').read())
 
 # Execute the job
-init_job(['python3', '1'])
+init_job()
 print("The job has finished")
 
 # pipeline.map(mapfunction)
