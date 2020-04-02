@@ -44,8 +44,14 @@ this series of steps:
 7. To deploy and run this job on AWS, download the following scripts: `create-biglambda-role.py`, `delete-biglambda-role.py`, 
 `setup.sh`, `policy.json` on the root-level directory of the project.
 8. Set your AWS credentials by storing your credentials under the file `credentials ` in `~/.aws/` directory.
-9. Run the command: ```./setup.sh <S3 shuffling bucket name> <your AWS Account ID>```. 
-10. Run the main function that you have created in step 5.
+9. Run the command: ```./setup.sh <S3 shuffling bucket name> <your AWS Account ID>```. Note that there is no need to 
+create this shuffling bucket before running this bash script. In fact, this is one of steps in the script. Make sure to 
+tailor `policy.json` to your own AWS Account Id and shuffling bucket name. 
+10. Run the main function that you have created in step 5, setting the working directory to `src/python` and the 
+environmental variable `serverless-mapreduce-role` to the output of executing `setup.sh`.
+
+### Clean up
+1. On the root-level directory of the project, run: `python3 delete-biglambda-role.py` 
 
 ### Writing tests
 Apart from manually testing your code locally using localstack as described in the previous section, you can also write tests.
