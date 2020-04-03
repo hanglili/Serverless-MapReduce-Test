@@ -1,7 +1,3 @@
-from serverless_mr.job.map_handler import map_handler
-
-
-@map_handler
 def map_function(outputs, input_pair):
     """
     :param outputs: [(k2, v2)] where k2 and v2 are intermediate data

@@ -1,8 +1,3 @@
-from serverless_mr.job.reduce_handler import reduce_handler
-
-
-# Contents are values stored under one S3 key
-@reduce_handler
 def reduce_function(outputs, intermediate_data):
     """
     :param outputs: (k2, [v2]) where k2 and v2 are output data
