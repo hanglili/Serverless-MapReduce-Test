@@ -1,4 +1,4 @@
-def aggregate_by_ip(outputs, intermediate_data):
+def reduce_function(outputs, intermediate_data):
     """
     :param outputs: (k2, [v2]) where k2 and v2 are output data
     which can be of any types
