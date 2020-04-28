@@ -28,6 +28,12 @@ from user_job_6.map_3 import identity_function
 #     .reduce(reduce_function, 4).map(remove_dots).map_shuffle(truncate_to_four_chars, partition)\
 #     .reduce(reduce_function, 3).run()
 
+online_config_pipeline_1 = {
+    "inputSourceType": "s3",
+    "inputSource": "serverless-mapreduce-storage",
+    "inputPrefix": "testing_partitioned",
+}
+
 config_pipeline_1 = {
     "inputSourceType": "s3",
     "inputSource": "serverless-mapreduce-storage-input",
@@ -47,20 +53,20 @@ config_pipeline_2 = {
     "localTestingInputPath": "../../input_data/testing_partitioned/dynamodb/"
 }
 
-config_pipeline_3 = {
-    "outputSourceType": "s3",
-    "outputSource": "serverless-mapreduce-storage-output",
-    "outputPrefix": "output"
-}
+# config_pipeline_3 = {
+#     "outputSourceType": "s3",
+#     "outputSource": "serverless-mapreduce-storage-output",
+#     "outputPrefix": "output"
+# }
 
 serverless_mr = ServerlessMR()
-pipeline1 = serverless_mr.config(config_pipeline_1).map(extract_data_s3)\
+pipeline1 = serverless_mr.config(online_config_pipeline_1).map(extract_data_s3)\
     .reduce(reduce_function, 4).finish()
 
 pipeline2 = serverless_mr.config(config_pipeline_2).map(extract_data_dynamo_db)\
     .reduce(reduce_function, 2).finish()
 
-# pipeline3 = serverless_mr.config(config_pipeline_3).merge([pipeline1, pipeline2]).map(identity_function)\
-#     .shuffle(partition).reduce(reduce_function, 5).run()
+pipeline3 = serverless_mr.config({}).merge([pipeline1, pipeline2]).map(identity_function)\
+    .shuffle(partition).reduce(reduce_function, 5).run()
 
-pipeline3 = serverless_mr.config(config_pipeline_3).merge([pipeline1, pipeline2]).map(identity_function).run()
+# pipeline3 = serverless_mr.config(config_pipeline_3).merge([pipeline1, pipeline2]).map(identity_function).run()

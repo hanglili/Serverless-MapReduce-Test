@@ -36,11 +36,12 @@ set the map, reduce and partition functions and then calls `run()` to start exec
 this series of steps:
     1. Setting `true` to the field `localTesting` in `static-job-info.json`.
     2. Install the library `localstack` by running the command `pip install localstack`.
-    3. Run docker.
+    3. Run docker and pull the docker container for `localstack` by running the command `docker pull localstack/localstack`.
     4. To run localstack (which simulates different AWS service behaviours with docker containers), run the command: 
     ```TMPDIR=/private$TMPDIR SERVICES=serverless LAMBDA_EXECUTOR=docker LAMBDA_REMOVE_CONTAINERS=false DOCKER_HOST=unix:///var/run/docker.sock  DEBUG=1 localstack start --docker```
-    5. Set any value (for example, `dummy-role`) to environmental variable `serverless_mapreduce_role`.
-    6. Run the main function that you have created in step 5.
+    5. Apart from that, in order to run AWS Lambda, pull the lambci docker image by running the command `docker pull lambci/lambda`.
+    6. Set any value (for example, `dummy-role`) to environmental variable `serverless_mapreduce_role`.
+    7. Run the main function that you have created in step 5.
 7. To deploy and run this job on AWS, download the following scripts: `create-biglambda-role.py`, `delete-biglambda-role.py`, 
 `setup.sh`, `policy.json` on the root-level directory of the project.
 8. Set your AWS credentials by storing your credentials under the file `credentials ` in `~/.aws/` directory.
