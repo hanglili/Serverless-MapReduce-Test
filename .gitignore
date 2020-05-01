@@ -1,7 +1,9 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
+/__pycache__/
 *.py[cod]
 *$py.class
+*.pyc
 
 # C extensions
 *.so
@@ -114,6 +116,12 @@ venv.bak/
 # Spyder project settings
 .spyderproject
 .spyproject
+
+# Node modules
+node_modules/
+.serverless/
+package-lock.json
+
 
 # Rope project settings
 .ropeproject

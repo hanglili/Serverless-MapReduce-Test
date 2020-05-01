@@ -1,4 +1,4 @@
-def extract_data(outputs, input_pair):
+def extract_data_s3(outputs, input_pair):
     """
     :param outputs: [(k2, v2)] where k2 and v2 are intermediate data
     which can be of any types
@@ -18,7 +18,7 @@ def extract_data(outputs, input_pair):
         print("type error: " + str(e))
 
 
-# def extract_data(outputs, input_pair):
+# def extract_data_dynamodb(outputs, input_pair):
 #     """
 #     :param outputs: [(k2, v2)] where k2 and v2 are intermediate data
 #     which can be of any types
