@@ -138,6 +138,8 @@ def reduce_function(outputs, intermediate_data):
         print("type error: " + str(e))
 
 ``` 
+Note that a combiner function follows the function signature as the reduce function. 
+
 The job's main file and its `static-job-info.json` can be found in `src/python` of this project. 
 
 ## Job Configuration Fields
