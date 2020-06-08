@@ -1,11 +1,11 @@
 def aggregate_by_ip(outputs, intermediate_data):
     """
-    :param outputs: (k2, [v2]) where k2 and v2 are output data
-    which can be of any types
-    :param intermediate_data: (k2, [v2]) where k2 and v2 are of type string.
-    Users need to convert them to their respective types explicitly.
-    NOTE: intermediate data type is the same as the output data type
+    :param outputs: [(k3, v3)] where k3 and v3 are output data
+    which can be of any type
+    :param intermediate_data: (k2, [v2]) where k2 and v2 are intermediate data
+    which can be of any type
     """
+
     key, values = intermediate_data
 
     revenue_sum = 0

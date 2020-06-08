@@ -1,7 +1,7 @@
 def extract_ip_and_revenue(outputs, input_pair):
     """
     :param outputs: [(k2, v2)] where k2 and v2 are intermediate data
-    which can be of any types
+    which can be of any type
     :param input_pair: (k1, v1) where k1 and v1 are assumed to be of type string
     """
     try:
