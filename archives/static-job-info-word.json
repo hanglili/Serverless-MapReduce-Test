@@ -1,0 +1,12 @@
+{
+    "jobName": "word-count",
+    "shufflingBucket": "serverlessmr-wordcount",
+    "inputSourceType": "s3",
+    "inputSource": "serverlessmr-wordcount-input",
+    "outputSourceType": "s3",
+    "outputSource": "serverlessmr-wordcount-output",
+    "useCombine": false,
+    "localTesting": true,
+    "localTestingInputPath": "../../input_data/word_count/s3/",
+    "serverlessDriver": false
+}
