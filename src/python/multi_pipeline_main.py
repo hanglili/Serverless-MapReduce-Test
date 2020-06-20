@@ -7,6 +7,10 @@ from multi_pipeline.reduce import reduce_function
 from multi_pipeline.partition import partition
 from multi_pipeline.map_3 import identity_function
 
+serverless_mr = ServerlessMR()
+
+# serverless_mr.map(extract_data_s3).map(identity_function).reduce(reduce_function, 4).\
+#     map(identity_function).reduce(reduce_function, 5).run()
 
 config_pipeline_1 = {
     "inputSourceType": "s3",
@@ -21,7 +25,6 @@ config_pipeline_2 = {
     "inputProcessingColumnsDynamoDB": [["sourceIP", "S"], ["adRevenue", "N"]]
 }
 
-serverless_mr = ServerlessMR()
 pipeline1 = serverless_mr.config(config_pipeline_1).map(extract_data_s3).combine(reduce_function)\
     .reduce(reduce_function, 4).finish()
 

@@ -4,4 +4,4 @@ from word_count.map import produce_counts
 from word_count.reduce import aggregate_counts
 
 serverless_mr = ServerlessMR()
-serverless_mr.map(produce_counts).reduce(aggregate_counts, 4).run()
+serverless_mr.map(produce_counts).reduce(aggregate_counts, 1).run()

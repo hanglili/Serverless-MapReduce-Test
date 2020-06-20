@@ -1,13 +1,12 @@
 {
-    "jobName": "bl-release",
-    "shufflingBucket": "serverless-mapreduce-storage-2",
+    "jobName": "word-count",
+    "shufflingBucket": "serverlessmr-wordcount",
     "inputSourceType": "s3",
-    "inputSource": "serverless-mapreduce-input-storage",
-    "inputPrefix": "testing_partitioned",
+    "inputSource": "serverlessmr-wordcount-input",
     "outputSourceType": "s3",
-    "outputSource": "serverless-mapreduce-output-storage-2",
-    "outputPrefix": "output",
+    "outputSource": "serverlessmr-wordcount-output",
     "useCombine": false,
-    "localTesting": false,
-    "serverlessDriver": true
+    "localTesting": true,
+    "localTestingInputPath": "../../input_data/word_count/s3/",
+    "serverlessDriver": false
 }
